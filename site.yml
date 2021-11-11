@@ -3,6 +3,10 @@
 - hosts: all
   become: yes
   tasks:
+    - name: Set hostnames
+      hostname:
+        name: "{{ inventory_hostname }}"
+
     - name: Create a sysop user
       user:
         name: sysop
@@ -13,3 +17,13 @@
         shell: /bin/bash  # Default: /bin/bash
         createhome: yes   # Default: yes
         home: /home/sysop # Default: /home/$name
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install vim
+      apt:
+        name: vim
+        state: latest
+
