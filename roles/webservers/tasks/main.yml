@@ -16,3 +16,38 @@
     name: ["php","libapache2-mod-php","php7.4-mysql","php7.4-common","php7.4-mysql","php7.4-xml","php7.4-xmlrpc","php7.4-curl","php7.4-gd","php7.4-imagick","php7.4-cli","php7.4-dev","php7.4-imap","php7.4-mbstring","php7.4-opcache","php7.4-soap","php7.4-zip","php7.4-intl"]
     state: latest
 
+- name: Copy apache configuration
+  file:
+    src: "files/apache.conf"
+    dest: "/etc/apache2/sites-available/wordpress.conf"
+    notify: Reload Apache
+
+- name: Enable rewrite
+  shell: /usr/sbin/a2enmod rewrite
+  notify: Reload Apache
+
+- name: Disable default site
+  shell: /usr/sbin/a2dissite 000-default.conf
+  notify: Apache Reload
+
+- name: Enable wp site
+  shell: /usr/sbin/a2ensite wordpress.conf
+  notify: Apache Reload
+
+# Actually install Wordpress
+- name: Dowload wordpress
+  unarchive:
+    src: https://wordpress.org/latest.tar.gz
+    dest: "/var/www/html"
+    remote_src: yes
+    creates: "/var/www/html/wordpress"
+
+- name: Set up wp-config
+  file:
+    src: "files/info.php"
+    dest: "/var/www/html/wordpress/wp-config.php"
+
+handlers:
+  - name: Reload Apache
+    service: apache2
+    state: reload
