@@ -1,0 +1,16 @@
+# DB specific configurations
+
+- name: Install a package
+  apt:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - mariadb-server
+    - mariadb-common
+    - mariadb-client
+
+- name: Enable mariadb
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
