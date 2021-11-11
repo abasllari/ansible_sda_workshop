@@ -14,3 +14,31 @@
     name: mariadb
     state: started
     enabled: yes
+
+- name: Set mariadb root password
+  mysql_user:
+    name: root
+    password: "ok"
+
+- name: Remove mariadb anonymous accounts
+  mysql_user:
+    name: ''
+    state: absent
+    login_user: root
+    login_password: "ok"
+
+- name: Create DB for Wordpress
+  mysql_db:
+    name: "wordpress"
+    state: present
+    login_user: root
+    login_password: "ok"
+
+- name: Create DB user for WP
+  mysql_user:
+    name: "wp_user"
+    password: "ok"
+    priv: "wordpress.*:ALL"
+    state: present
+    login_user: root
+    login_password: "ok"
