@@ -16,10 +16,13 @@
     state: started
     enabled: yes
 
+# FIXME: make it run on all runs, also first one
 - name: Set mariadb root password
   mysql_user:
     name: root
     password: "ok"
+    login_user: root
+    login_password: ok
     login_unix_socket: /run/mysqld/mysqld.sock
 
 - name: Remove mariadb anonymous accounts
