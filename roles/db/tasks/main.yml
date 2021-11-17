@@ -16,34 +16,41 @@
     state: started
     enabled: yes
 
-# FIXME: make it run on all runs, also first one
-- name: Set mariadb root password
+
+## FIXME: make it run on all runs, also first one
+- name: Set root user password
   mysql_user:
-    name: root
-    password: "ok"
-    login_user: root
-    login_password: ok
-    login_unix_socket: /run/mysqld/mysqld.sock
+   name: root
+   password: "Akshi@123"
+   append_privs: true
+   #priv: "mydb.*:'root@localhost'"
+   login_unix_socket: /run/mysqld/mysqld.sock
+
 
 - name: Remove mariadb anonymous accounts
   mysql_user:
     name: ''
     state: absent
     login_user: root
-    login_password: "ok"
+    login_password: "Akshi@123"
+    append_privs: true
+    login_unix_socket: /run/mysqld/mysqld.sock
 
 - name: Create DB for Wordpress
   mysql_db:
     name: "wordpress"
     state: present
     login_user: root
-    login_password: "ok"
+    login_password: "Akshi@123"
+    #append_privs: true
+    login_unix_socket: /run/mysqld/mysqld.sock
 
 - name: Create DB user for WP
   mysql_user:
     name: "wp_user"
-    password: "ok"
+    password: "Akshi@123"
     priv: "wordpress.*:ALL"
     state: present
     login_user: root
-    login_password: "ok"
+    login_password: "Akshi@123"
+    login_unix_socket: /run/mysqld/mysqld.sock
