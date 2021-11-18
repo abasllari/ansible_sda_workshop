@@ -49,8 +49,22 @@
   mysql_user:
     name: "wp_user"
     password: "Akshi@123"
+    host: "*"
+    login_host: "*"
     priv: "wordpress.*:ALL"
     state: present
     login_user: root
     login_password: "Akshi@123"
     login_unix_socket: /run/mysqld/mysqld.sock
+
+- name: bind mysql remote address
+  ini_file: dest=/etc/mysql/mariadb.conf.d/50-server.cnf
+            section=mysqld
+            option=bind-address
+            value=0.0.0.0
+- name: Restart mysql
+  service:
+    name: mysql
+    state: restarted
+
+
